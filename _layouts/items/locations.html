@@ -1,0 +1,34 @@
+---
+layout: default
+---
+
+
+
+
+<div class="p-2">
+
+    {{ content }}
+
+    <div class="p-2">
+        <h2>
+            Location: {{ page.title }}
+        </h2>
+        <p>
+            {{ page.description }}
+        </p>
+    </div>
+
+    <div id="map" style="height: 400px;" class="border border-solid rounded"></div>
+    <script>
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://demotiles.maplibre.org/style.json',
+            center: [{{ page.longitude }}, {{ page.latitude }}],
+            zoom: 5,
+            renderWorldCopies: false
+        });
+        var marker = new maplibregl.Marker()
+            .setLngLat([{{ page.longitude }}, {{ page.latitude }}])
+            .addTo(map);
+    </script>
+</div>

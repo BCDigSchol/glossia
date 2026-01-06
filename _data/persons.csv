@@ -1,0 +1,8 @@
+id,short_name,full_name,location_ids,birth,birth_approximate,death,death_approximate,description,
+cambyses_ii,Cambyses II,Cambyses II of Persia,persepolis,530 BC,TRUE,522 BC,TRUE,"King of Persia from 530 BC to 522 BC, known for his conquest of Egypt",
+cyrus_ii,Cyrus II,Cyrus II of Persia,persepolis,600 BC,TRUE,530 BC,TRUE,"Founder of the Achaemenid Empire, known for his vast conquests and establishment of the Persian Empire",
+thucydides,Thucydides,Thucydides of Athens,athens,460 BC,TRUE,400 BC,TRUE,"Athenian historian and general, author of the History of the Peloponnesian War",
+tissaphernes,Tissaphernes,Tissaphernes of Persia,persia,445 BC,TRUE,395 BC,TRUE,"Persian satrap and military commander during the Peloponnesian War",
+clearchus,Clearchus,Clearchus of Sparta,sparta,450 BC,TRUE,401 BC,TRUE,"Spartan general known for his role in the expedition of the Ten Thousand",
+xenias,Xenias,Xenias the Arcadian,miletus,470 BC,TRUE,400 BC,TRUE,"Arcadian mercenary leader who served in the Persian army",
+alexander_the_great,Alexander the Great,Alexander III of Macedon,delphi,356 BC,TRUE,323 BC,TRUE,"King of Macedon who created one of the largest empires in ancient history through his military conquests",

@@ -1,0 +1,186 @@
+---
+layout: default
+---
+
+<div class="p-2">
+
+    {{ content }}
+
+    <h4>
+
+{% assign sources = site.data[site.sources_csv] %}
+  {% assign authors = site.data[site.authors_csv] %}
+      {% assign source = sources | where: "id", page.source_id | first %}
+        {% if source %}
+          {%- comment -%} Handle single or multiple author_ids on the source {%- endcomment -%}
+          {% if source.author_ids contains ";" %}
+            {% assign author_ids = source.author_ids | split: ";" | map: "strip" %}
+          {% else %}
+            {% assign author_ids = source.author_ids | append: "" | split: "|" %}
+          {% endif %}
+          {% assign matching_authors = "" | split: "" %}
+          {% for author in authors %}
+            {% assign author_id_str = author.id | append: "" | strip %}
+            {% if author_ids contains author_id_str %}
+              {% assign author_info = author.id | append: '|' | append: author.full_name %}
+                {% assign matching_authors = matching_authors | push: author_info %}
+            {% endif %}
+          {% endfor %}
+          {% if matching_authors.size > 0 %}
+            {% for author_info in matching_authors -%}
+            {% assign parts = author_info | split: '|' -%}
+            <a href="{{ 'author/' | append: parts[0] | relative_url }}">{{ parts[1] }}</a>{% if forloop.last == false %},{% endif -%}
+            {% endfor %}
+          {% endif %}
+          , <a href="{{ 'source/' | append: source.id | relative_url }}">{{ source.title }}</a>
+        {% endif %}
+
+        {% if page.citation_start == page.citation_end %}
+          &nbsp;({{ page.citation_start }})
+        {% else %}
+          &nbsp;{{ page.citation_start }} - {{ page.citation_end }}
+        {% endif %}
+</h4>
+
+<p>
+    <em>{{ page.citation_date }}</em>
+</p>
+
+<div>
+  {% assign people = site.data[site.persons_csv] %}
+
+  {% if page.people_ids %}
+    {% if page.people_ids contains ";" %}
+      {% assign raw_people_ids = page.people_ids | split: ";" %}
+    {% else %}
+      {% assign raw_people_ids = page.people_ids | append: "" | split: "|" %}
+    {% endif %}
+    {%- comment -%} Force all IDs to strings and strip whitespace {%- endcomment -%}
+    {% assign people_ids = "" | split: "" %}
+    {% for id in raw_people_ids %}
+      {% assign id_str = id | append: "" | strip %}
+      {% assign people_ids = people_ids | push: id_str %}
+    {% endfor %}
+  {% else %}
+    {% assign people_ids = "" | split: "" %}
+  {% endif %}
+
+  {% assign matching_people = "" | split: "" %}
+  {% for person in people %}
+    {% assign person_id_str = person.id | append: "" | strip %}
+    {% if people_ids contains person_id_str %}
+      {% assign person_info = person.id | append: '|' | append: person.full_name %}
+      {% assign matching_people = matching_people | push: person_info %}
+    {% endif %}
+  {% endfor %}
+
+  {% if matching_people.size > 0 %}
+  <p>
+    People: 
+      {% for person_info in matching_people -%}
+        {% assign parts = person_info | split: '|' -%}
+        <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"><a href="{{ 'person/' | append: parts[0] | relative_url }}">{{ parts[1] }}</a></span>
+      {% endfor %}
+  </p>
+  {% endif %}
+</div>
+
+<div>
+  {% assign locations = site.data[site.locations_csv] %}
+
+  {% if page.location_ids %}
+    {% if page.location_ids contains ";" %}
+      {% assign raw_location_ids = page.location_ids | split: ";" %}
+    {% else %}
+      {% assign raw_location_ids = page.location_ids | append: "" | split: "|" %}
+    {% endif %}
+    {%- comment -%} Force all IDs to strings and strip whitespace {%- endcomment -%}
+    {% assign location_ids = "" | split: "" %}
+    {% for id in raw_location_ids %}
+      {% assign id_str = id | append: "" | strip %}
+      {% assign location_ids = location_ids | push: id_str %}
+    {% endfor %}
+  {% else %}
+    {% assign location_ids = "" | split: "" %}
+  {% endif %}
+
+  {% assign matching_locations = "" | split: "" %}
+  {% for location in locations %}
+    {% assign location_id_str = location.id | append: "" | strip %}
+    {% if location_ids contains location_id_str %}
+      {% assign location_info = location.id | append: '|' | append: location.title | append: '|' | append: location.latitude | append: '|' | append: location.longitude %}
+      {% assign matching_locations = matching_locations | push: location_info %}
+    {% endif %}
+  {% endfor %}
+
+  {% if matching_locations.size > 0 %}
+  <p>
+    Places: 
+      {% for location_info in matching_locations -%}
+        {% assign parts = location_info | split: '|' -%}
+        <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"><a href="{{ 'location/' | append: parts[0] | relative_url }}">{{ parts[1] }}</a></span>
+      {% endfor %}
+    
+  </p>
+  {% endif %}
+</div>
+
+<div>
+  Subjects:
+  {% assign subjects = page.subjects | split: ";" %}
+  {% for subject in subjects %}
+    <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+      <a href="/selections/?search_field=subjects&search_term={{ subject | strip | url_encode }}">{{ subject | strip }}</a>
+    </span>
+  {% endfor %}
+</div>
+
+---
+
+<p>
+  {{ page.excerpt | replace: '\n', '<br />' | markdownify }}
+</p>
+{% assign min_lat = nil %}
+{% assign max_lat = nil %}
+{% assign min_lng = nil %}
+{% assign max_lng = nil %}
+{% for location_info in matching_locations %}
+  {% assign parts = location_info | split: '|' %}
+  {% assign lat = parts[2] | plus: 0 %}
+  {% assign lng = parts[3] | plus: 0 %}
+  {% if forloop.first %}
+    {% assign min_lat = lat %}
+    {% assign max_lat = lat %}
+    {% assign min_lng = lng %}
+    {% assign max_lng = lng %}
+  {% else %}
+    {% if lat < min_lat %}{% assign min_lat = lat %}{% endif %}
+    {% if lat > max_lat %}{% assign max_lat = lat %}{% endif %}
+    {% if lng < min_lng %}{% assign min_lng = lng %}{% endif %}
+    {% if lng > max_lng %}{% assign max_lng = lng %}{% endif %}
+  {% endif %}
+{% endfor %}
+{% assign center_lat = min_lat | plus: max_lat | divided_by: 2 %}
+{% assign center_lng = min_lng | plus: max_lng | divided_by: 2 %}
+
+<div id="map" style="height: 400px;" class="border border-solid rounded"></div>
+<script>
+    {% if matching_locations.size > 0 %}
+        var mapCenter = [{{ center_lng }}, {{ center_lat }}];
+    {% else %}
+        var mapCenter = [1, 1]; // fallback
+    {% endif %}
+    var map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://demotiles.maplibre.org/style.json',
+        center: mapCenter,
+        zoom: 5,
+        renderWorldCopies: false
+    });
+    {% for location_info in matching_locations -%}
+      {% assign parts = location_info | split: '|' -%}
+        new maplibregl.Marker()
+            .setLngLat([{{ parts[3] }}, {{ parts[2] }}])
+            .addTo(map);
+    {% endfor %}
+</script>

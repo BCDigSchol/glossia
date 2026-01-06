@@ -1,0 +1,41 @@
+---
+layout: page
+---
+
+{{ content }}
+
+<input
+  type="text"
+  id="glossary-search"
+  placeholder="Search glossary..."
+  style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
+/>
+
+<div class="grid grid-cols-3 gap-4" id="glossary-grid">
+  {% for glossary in site.data.glossary %}
+    <div class="grid-item border border-solid rounded-lg text-center" data-name="{{ glossary.term | downcase }}">
+      <a href="/glossary/{{ glossary.id }}/">
+        <h3>{{ glossary.term }}</h3>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('glossary-search');
+  const items = document.querySelectorAll('#glossary-grid .grid-item');
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    items.forEach(item => {
+      const name = item.getAttribute('data-name');
+      if (name.includes(query)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+</script>

@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+<div class="p-2">
+
+    {{ content }}
+
+    <div class="p-2">
+        <h2>
+            {{ page.short_name }}
+        </h2>
+        <p>
+            <em>{{ page.full_name }}</em>
+        </p>
+        <p>
+            {% if page.birth %}Born: {{ page.birth }}{% if page.birth_approximate %} (approx.){% endif %}{% endif %}
+            {% if page.death %} &mdash; Died: {{ page.death }}{% if page.death_approximate %} (approx.){% endif %}{% endif %}
+        </p>
+        <p>
+            {{ page.description }}
+        </p>
+    </div>
+</div>

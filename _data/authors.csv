@@ -1,0 +1,5 @@
+id,short_name,full_name,birth,birth_approximate,death,death_approximate,description,
+1,Herodotus,Herodotus of Halicarnassus,484 BC,TRUE,425 BC,TRUE,"Ancient Greek historian known as the 'Father of History'",
+2,Thucydides,Thucydides of Athens,460 BC,TRUE,400 BC,TRUE,"Athenian historian and general, author of the History of the Peloponnesian War",
+3,Xenophon,Xenophon of Athens,431 BC,TRUE,354 BC,TRUE,"Ancient Greek historian, soldier, and student of Socrates",
+4,Plutarch,Plutarch of Chaeronea,46 AD,FALSE,120 AD,FALSE,"Greek biographer and essayist known for Parallel Lives"

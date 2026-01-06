@@ -1,0 +1,59 @@
+# change the followings to match your Github username and repo name
+# baseurl: "/glossia" # the name of your github repo
+# url: "https://BCDigSchol.github.io" # the url of your github pages (change BCDigSchol to your username)
+
+# site information used in page title, meta data etc.
+title: Glossia Source Reader
+# description: Developed by Boston College
+
+selections_csv: selections
+locations_csv: locations
+authors_csv: authors
+persons_csv: persons
+timeframes_csv: timeframes
+sources_csv: sources
+excerpts_csv: excerpts
+glossary_csv: glossary
+
+# color theme for links
+theme-color: indigo # indigo|yellow|pink|green|stone|
+
+# nav bar settings and links
+nav-menu:
+  - title: Home
+    link: index
+  - title: Selections
+    link: selections
+  - title: Subjects
+    link: subjects
+  - title: Glossary
+    link: glossary
+  - title: More Info
+    submenu:
+      - title: Sources
+        link: sources
+      - title: People
+        link: people
+      - title: Authors
+        link: authors
+      - title: Locations
+        link: locations
+      - title: Timeframes
+        link: timeframes
+  - title: About
+    link: about
+
+hide-footer: false # set to true to hide the footer
+footer-message: Glossia Source Reader | CC BY-NC License
+footer-submessage:  By David J. Thomas, with the Digital Scholarship Group, Boston College
+footer-submessage-link: https://ds.bc.edu
+
+# google-analytics: // if you want to use Google analytics, include your ID here
+
+include:
+  - _pages
+
+# jekyll plugins - no need to change
+plugins:
+    - jekyll-seo-tag
+    - jekyll-feed

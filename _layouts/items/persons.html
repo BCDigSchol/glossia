@@ -1,0 +1,98 @@
+---
+layout: default
+---
+
+<div class="p-2">
+
+    {{ content }}
+
+    <div class="p-2">
+        <h2>
+            {{ page.short_name }}
+        </h2>
+        <p>
+            <em>{{ page.full_name }}</em>
+        </p>
+        <p>
+            {% if page.birth %}Born: {{ page.birth }}{% if page.birth_approximate %} (approx.){% endif %}{% endif %}
+            {% if page.death %} &mdash; Died: {{ page.death }}{% if page.death_approximate %} (approx.){% endif %}{% endif %}
+        </p>
+        <p>
+            {{ page.description }}
+        </p>
+        <div>
+            {% assign locations = site.data[site.locations_csv] %}
+
+  {% if page.location_ids %}
+    {% if page.location_ids contains ";" %}
+      {% assign raw_location_ids = page.location_ids | split: ";" %}
+    {% else %}
+      {% assign raw_location_ids = page.location_ids | append: "" | split: "|" %}
+    {% endif %}
+    {%- comment -%} Force all IDs to strings and strip whitespace {%- endcomment -%}
+    {% assign location_ids = "" | split: "" %}
+    {% for id in raw_location_ids %}
+      {% assign id_str = id | append: "" | strip %}
+      {% assign location_ids = location_ids | push: id_str %}
+    {% endfor %}
+  {% else %}
+    {% assign location_ids = "" | split: "" %}
+  {% endif %}
+
+  {% assign matching_locations = "" | split: "" %}
+  {% for location in locations %}
+    {% assign location_id_str = location.id | append: "" | strip %}
+    {% if location_ids contains location_id_str %}
+      {% assign location_info = location.id | append: '|' | append: location.title | append: '|' | append: location.latitude | append: '|' | append: location.longitude %}
+      {% assign matching_locations = matching_locations | push: location_info %}
+    {% endif %}
+  {% endfor %}
+  
+            {% assign min_lat = nil %}
+{% assign max_lat = nil %}
+{% assign min_lng = nil %}
+{% assign max_lng = nil %}
+{% for location_info in matching_locations %}
+  {% assign parts = location_info | split: '|' %}
+  {% assign lat = parts[2] | plus: 0 %}
+  {% assign lng = parts[3] | plus: 0 %}
+  {% if forloop.first %}
+    {% assign min_lat = lat %}
+    {% assign max_lat = lat %}
+    {% assign min_lng = lng %}
+    {% assign max_lng = lng %}
+  {% else %}
+    {% if lat < min_lat %}{% assign min_lat = lat %}{% endif %}
+    {% if lat > max_lat %}{% assign max_lat = lat %}{% endif %}
+    {% if lng < min_lng %}{% assign min_lng = lng %}{% endif %}
+    {% if lng > max_lng %}{% assign max_lng = lng %}{% endif %}
+  {% endif %}
+{% endfor %}
+{% assign center_lat = min_lat | plus: max_lat | divided_by: 2 %}
+{% assign center_lng = min_lng | plus: max_lng | divided_by: 2 %}
+
+<div id="map" style="height: 400px;" class="border border-solid rounded"></div>
+<script>
+    {% if matching_locations.size > 0 %}
+        var mapCenter = [{{ center_lng }}, {{ center_lat }}];
+    {% else %}
+        var mapCenter = [1, 1]; // fallback
+    {% endif %}
+    var map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://demotiles.maplibre.org/style.json',
+        center: mapCenter,
+        zoom: 5,
+        renderWorldCopies: false
+    });
+    {% for location_info in matching_locations -%}
+      {% assign parts = location_info | split: '|' -%}
+        new maplibregl.Marker()
+            .setLngLat([{{ parts[3] }}, {{ parts[2] }}])
+            .addTo(map);
+    {% endfor %}
+</script>
+
+        </div>
+    </div>
+</div>

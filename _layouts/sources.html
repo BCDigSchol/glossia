@@ -1,0 +1,41 @@
+---
+layout: page
+---
+
+{{ content }}
+
+<input
+  type="text"
+  id="source-search"
+  placeholder="Search sources..."
+  style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
+/>
+
+<div class="grid grid-cols-3 gap-4" id="sources-grid">
+  {% for source in site.data.sources %}
+    <div class="grid-item border border-solid rounded-lg text-center" data-name="{{ source.title | downcase }}">
+      <a href="/source/{{ source.id }}/">
+        <h3>{{ source.title }}</h3>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('source-search');
+  const items = document.querySelectorAll('#sources-grid .grid-item');
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    items.forEach(item => {
+      const name = item.getAttribute('data-name');
+      if (name.includes(query)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+</script>

@@ -1,0 +1,208 @@
+---
+layout: page
+---
+
+{{ content }}
+
+<select id="search-type" style="margin-bottom: 1em; padding: 0.5em;">
+  <option value="title">Title</option>
+  <option value="author">Author</option>
+  <option value="subjects">Subjects</option>
+  <option value="people">People</option>
+  <option value="places">Places</option>
+</select>
+
+<input
+  type="text"
+  id="selection-search"
+  placeholder="Search selections..."
+  style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
+/>
+
+<div class="grid grid-cols-3 gap-4" id="selections-grid">
+  {% assign sources = site.data[site.sources_csv] %}
+  {% assign authors = site.data[site.authors_csv] %}
+
+  {% for selection in site.data.selections %}
+    {% assign source = sources | where: "id", selection.source_id | first %}
+    {% assign matching_authors = "" | split: "" %}
+    {% if source %}
+      {%- comment -%} Handle single or multiple author_ids on the source {%- endcomment -%}
+      {% if source.author_ids contains ";" %}
+        {% assign author_ids = source.author_ids | split: ";" | map: "strip" %}
+      {% else %}
+        {% assign author_ids = source.author_ids | append: "" | split: "|" %}
+      {% endif %}
+      {% for author in authors %}
+        {% assign author_id_str = author.id | append: "" | strip %}
+        {% if author_ids contains author_id_str %}
+          {% assign matching_authors = matching_authors | push: author.short_name %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% assign authors_str = matching_authors | join: ';' | downcase %}
+
+    {% assign people = site.data[site.persons_csv] %}
+    {% if selection.people_ids %}
+      {% if selection.people_ids contains ";" %}
+        {% assign raw_people_ids = selection.people_ids | split: ";" %}
+      {% else %}
+        {% assign raw_people_ids = selection.people_ids | append: "" | split: "|" %}
+      {% endif %}
+      {% assign people_ids = "" | split: "" %}
+      {% for id in raw_people_ids %}
+        {% assign id_str = id | append: "" | strip %}
+        {% assign people_ids = people_ids | push: id_str %}
+      {% endfor %}
+    {% else %}
+      {% assign people_ids = "" | split: "" %}
+    {% endif %}
+    {% assign matching_people = "" | split: "" %}
+    {% for person in people %}
+      {% assign person_id_str = person.id | append: "" | strip %}
+      {% if people_ids contains person_id_str %}
+        {% assign matching_people = matching_people | push: person.short_name %}
+      {% endif %}
+    {% endfor %}
+    {% assign people_str = matching_people | join: ';' | downcase %}
+
+    {% assign locations = site.data[site.locations_csv] %}
+    {% if selection.location_ids %}
+      {% if selection.location_ids contains ";" %}
+        {% assign raw_location_ids = selection.location_ids | split: ";" %}
+      {% else %}
+        {% assign raw_location_ids = selection.location_ids | append: "" | split: "|" %}
+      {% endif %}
+      {% assign location_ids = "" | split: "" %}
+      {% for id in raw_location_ids %}
+        {% assign id_str = id | append: "" | strip %}
+        {% assign location_ids = location_ids | push: id_str %}
+      {% endfor %}
+    {% else %}
+      {% assign location_ids = "" | split: "" %}
+    {% endif %}
+
+    {% assign matching_locations = "" | split: "" %}
+    {% for location in locations %}
+      {% assign location_id_str = location.id | append: "" | strip %}
+      {% if location_ids contains location_id_str %}
+        {% assign matching_locations = matching_locations | push: location.title %}
+      {% endif %}
+    {% endfor %}
+    {% assign locations_str = matching_locations | join: ';' | downcase %}
+
+<div class="grid-item border border-solid rounded-lg text-center pb-2"
+  data-name="{% if source %}{{ source.title | downcase | strip }}{% endif %}"
+  data-subjects="{% if selection.subjects %}{{ selection.subjects | downcase }}{% endif %}"
+  data-authors="{{ authors_str }}"
+  data-people="{{ people_str }}"
+  data-locations="{{ locations_str }}">
+      <div class="text-sm">
+        <div class="grid-item-shaded-header mb-2 rounded-t-lg text-lg font-semibold py-3">
+          <a href="{{ '/selection/' | append: selection.id | relative_url }}">
+            {% if matching_authors.size > 0 %}
+              {{ matching_authors | join: ", " }}
+            {% endif %}
+            &nbsp;{{ source.abbreviated_title }}
+            {% if selection.citation_start == selection.citation_end %}
+              &nbsp;({{ selection.citation_start }})
+            {% else %}
+              &nbsp;{{ selection.citation_start }}-{{ selection.citation_end }}
+            {% endif %}
+          </a>
+        </div>
+
+        {% if selection.subjects %}
+          <div class="mb-2">
+            Subjects:
+            {% assign subjects = selection.subjects | split: ";" %}
+            {% for subject in subjects %}
+              <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                <a href="selections/?search_field=subjects&search_term={{ subject | strip | url_encode }}">{{ subject | strip }}</a>
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if matching_locations.size > 0 %}
+          <div class="mb-2">
+            Locations:
+            {% for location_title in matching_locations %}
+              <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                <a href="selections/?search_field=places&search_term={{ location_title | strip }}">{{ location_title | strip }}</a>
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if matching_people.size > 0 %}
+          <div class="mb-2">
+            People:
+            {% for person_name in matching_people %}
+              <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                <a href="selections/?search_field=people&search_term={{ person_name | strip | url_encode }}">{{ person_name | strip }}</a>
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+function getQueryParams() {
+  const params = {};
+  window.location.search.substring(1).split("&").forEach(function(pair) {
+    if (!pair) return;
+    const parts = pair.split("=");
+    params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || "");
+  });
+  return params;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('selection-search');
+  const searchType = document.getElementById('search-type');
+  const items = document.querySelectorAll('#selections-grid .grid-item');
+
+  function filterItems() {
+    let query = searchInput.value.trim().toLowerCase().replace(/\+/g, ' ');
+    const type = searchType.value;
+    items.forEach(item => {
+      let haystack = '';
+      if (type === 'title') {
+        haystack = (item.getAttribute('data-name') || '').toLowerCase().trim();
+      } else if (type === 'subjects') {
+        const subjects = (item.getAttribute('data-subjects') || '').split(';').map(s => s.trim());
+        haystack = subjects.join(' ');
+      } else if (type === 'author') {
+        const authors = (item.getAttribute('data-authors') || '').split(';').map(s => s.trim());
+        haystack = authors.join(' ');
+      } else if (type === 'people') {
+        const people = (item.getAttribute('data-people') || '').split(';').map(s => s.trim());
+        haystack = people.join(' ');
+      } else if (type === 'places') {
+        const people = (item.getAttribute('data-locations') || '').split(';').map(s => s.trim());
+        haystack = people.join(' ');
+      }
+      if (haystack.includes(query)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  // --- Query string support ---
+  const params = getQueryParams();
+  if (params.search_field && params.search_term) {
+    const term = params.search_term.replace(/\+/g, ' ');
+    searchType.value = params.search_field;
+    searchInput.value = term;
+    filterItems();
+  }
+
+  searchInput.addEventListener('input', filterItems);
+  searchType.addEventListener('change', filterItems);
+});
+</script>

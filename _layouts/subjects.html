@@ -1,0 +1,25 @@
+---
+layout: page
+---
+
+{{ content }}
+
+{% assign selections = site.data[site.selections_csv] %}
+{% assign all_subjects = "" | split: "" %}
+{% for selection in selections %}
+  {% if selection.subjects %}
+    {% assign subjects = selection.subjects | split: ";" %}
+    {% for subject in subjects %}
+      {% assign subject_clean = subject | strip %}
+      {% unless all_subjects contains subject_clean %}
+        {% assign all_subjects = all_subjects | push: subject_clean %}
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+<ul>
+  {% for subject in all_subjects %}
+    <li>{{ subject }}</li>
+  {% endfor %}
+</ul>
