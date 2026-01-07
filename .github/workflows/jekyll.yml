@@ -45,9 +45,15 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
-        run: bundle exec jekyll build
+        run: bundle exec jekyll build --verbose
         env:
           JEKYLL_ENV: production
+      - name: List generated pages
+        run: |
+          echo "Generated pages in _site:"
+          ls -R _site/selection/ || echo "No selection pages generated"
+          ls -R _site/author/ || echo "No author pages generated"
+          ls -R _site/source/ || echo "No source pages generated"
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3

@@ -22,7 +22,7 @@ layout: default
     <script>
         var map = new maplibregl.Map({
             container: 'map',
-            style: 'https://demotiles.maplibre.org/style.json',
+            style: '{{ site.map_tile_server }}',
             center: [{{ page.longitude }}, {{ page.latitude }}],
             zoom: 5,
             renderWorldCopies: false
