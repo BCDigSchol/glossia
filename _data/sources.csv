@@ -1,5 +1,5 @@
-id,author_ids,title,abbreviated_title,description
-1,1,The Histories, Hist.,"A lengthy account of the Greco-Persian Wars and other historical events by Herodotus"
-2,2,History of the Peloponnesian War, Hist. Pelop.,"A historical account of the Peloponnesian War between Athens and Sparta by Thucydides"
-3,3,Anabasis, Anab.,"A narrative of the expedition of Greek mercenaries in Persia by Xenophon"
-4,4,Parallel Lives, Par. Liv.,"A series of biographies of famous Greeks and Romans by Plutarch"
+id,author_ids,title,abbreviated_title,source_date,description
+1,1,The Histories, Hist.,440-430 BC,"A lengthy account of the Greco-Persian Wars and other historical events by Herodotus"
+2,2,History of the Peloponnesian War, Hist. Pelop.,431-411 BC,"A historical account of the Peloponnesian War between Athens and Sparta by Thucydides"
+3,3,Anabasis, Anab.,370 BC,"A narrative of the expedition of Greek mercenaries in Persia by Xenophon"
+4,4,Parallel Lives, Par. Liv.,c.100-120 AD,"A series of biographies of famous Greeks and Romans by Plutarch"

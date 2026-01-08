@@ -15,6 +15,7 @@ timeframes_csv: timeframes
 sources_csv: sources
 excerpts_csv: excerpts
 glossary_csv: glossary
+annotations_csv: annotations
 
 # address for map tile server - change if you have your own server
 map_tile_server: https://demotiles.maplibre.org/style.json

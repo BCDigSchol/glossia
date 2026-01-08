@@ -2,11 +2,12 @@
 layout: default
 ---
 
-<div class="p-2">
+<div class="w-full">
+  <div class="mx-4">
 
-    {{ content }}
+{{ content }}
 
-    <h4>
+    <h4 class="bg-blue-100 border border-blue-300 rounded-xl px-6 py-4 shadow-lg text-blue-900 font-bold text-lg flex flex-wrap items-center gap-2 mb-4 transition hover:bg-blue-200">
 
 {% assign sources = site.data[site.sources_csv] %}
   {% assign authors = site.data[site.authors_csv] %}
@@ -40,8 +41,26 @@ layout: default
         {% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}{% endif %}
 </h4>
 
+  <fieldset class="my-5 rounded-lg bg-gray-100">
+    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+      Selection Details
+    </legend>
+
+    <p>
+    Date of source: 
+    <em>
+      {% assign sources = site.data[site.sources_csv] %}
+      {% assign source = sources | where: "id", page.source_id | first %}
+      {% if source and source.source_date %}
+        {{ source.source_date }}
+      {% else %}
+        Unknown
+      {% endif %}
+    </em>
+</p>
+
 <p>
-    <em>{{ page.citation_date }}</em>
+    Date of events: <em>{{ page.citation_date }}</em>
 </p>
 
 <div>
@@ -57,7 +76,7 @@ layout: default
     {% assign people_ids = "" | split: "" %}
     {% for id in raw_people_ids %}
       {% assign id_str = id | append: "" | strip %}
-      {% assign people_ids = people_ids | push: id_str %}
+      {% assign people_ids = pcitation_dateeople_ids | push: id_str %}
     {% endfor %}
   {% else %}
     {% assign people_ids = "" | split: "" %}
@@ -132,9 +151,42 @@ layout: default
     </span>
   {% endfor %}
 </div>
+  </fieldset>
 
-<fieldset class="my-5 rounded-lg bg-gray-100">
-  <legend class="border border-solid border-grey-200 bg-gray-500 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+{% assign annotations = site.data[site.annotations_csv] %}
+{% assign prefatory_annotations = "" | split: "" %}
+{% assign nonprefatory_annotations = "" | split: "" %}
+{% assign page_id = page.id | append: "" | strip %}
+
+{% for annotation in annotations %}
+  {% assign annotation_selection_id = annotation.selection_id | append: "" | strip %}
+  {% assign is_prefatory = annotation.is_prefatory | downcase | strip %}
+  {% if annotation_selection_id == page_id %}
+    {% if is_prefatory == "true" %}
+      {% assign prefatory_annotations = prefatory_annotations | push: annotation %}
+    {% else %}
+      {% assign nonprefatory_annotations = nonprefatory_annotations | push: annotation %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if prefatory_annotations.size > 0 %}
+  <fieldset class="my-5 rounded-lg bg-gray-100">
+    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+      Prefatory Notes
+    </legend>
+    <ul class="list-none m-0 p-0">
+      {% for annotation in prefatory_annotations %}
+        <li class="mb-3 p-4">
+          <em>{{ annotation.text | markdownify }}</em>
+        </li>
+      {% endfor %}
+    </ul>
+  </fieldset>
+{% endif %}
+
+<fieldset class="my-8 rounded-2xl bg-white border-2 border-blue-400 shadow-2xl py-6 transition-transform duration-200 hover:scale-[1.01]">
+  <legend class="border border-grey-200 bg-gray-800 border-solid rounded-lg px-4 py-2 text-white font-bold shadow-md text-lg tracking-wide">
     {% assign sources = site.data[site.sources_csv] %}
     {% assign authors = site.data[site.authors_csv] %}
     {% assign source = sources | where: "id", page.source_id | first %}
@@ -168,6 +220,21 @@ layout: default
   </legend>
   {{ page.excerpt | replace: '\n', '<br />' | markdownify }}
 </fieldset>
+
+{% if nonprefatory_annotations.size > 0 %}
+  <fieldset class="my-5 rounded-lg bg-gray-100">
+    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+      Annotations
+    </legend>
+    <ol class="m-0 p-0">
+      {% for annotation in nonprefatory_annotations %}
+        <li class="mb-3 p-4 ml-10">
+          <em>{{ annotation.text | markdownify }}</em>
+        </li>
+      {% endfor %}
+    </ol>
+  </fieldset>
+{% endif %}
 
 
 {% assign min_lat = nil %}
@@ -214,3 +281,8 @@ layout: default
             .addTo(map);
     {% endfor %}
 </script>
+
+  </div>
+
+    
+</div>
