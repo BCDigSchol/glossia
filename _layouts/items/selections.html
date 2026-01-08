@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="w-full">
-  <div class="mx-4">
+  <div class="mx-4 mt-2">
 
 {{ content }}
 
@@ -223,6 +223,47 @@ layout: default
   {% endfor %}
 </div>
   </fieldset>
+
+<fieldset class="my-5 rounded-lg bg-gray-100">
+    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+    Author Biography
+  </legend>
+  {% assign sources = site.data[site.sources_csv] %}
+  {% assign authors = site.data[site.authors_csv] %}
+  {% assign source = sources | where: "id", page.source_id | first %}
+  {% if source %}
+    {% if source.author_ids contains ";" %}
+      {% assign author_ids = source.author_ids | split: ";" | map: "strip" %}
+    {% else %}
+      {% assign author_ids = source.author_ids | append: "" | split: "|" %}
+    {% endif %}
+    {% assign matching_authors = "" | split: "" %}
+    {% for author in authors %}
+      {% assign author_id_str = author.id | append: "" | strip %}
+      {% if author_ids contains author_id_str %}
+        {% assign matching_authors = matching_authors | push: author %}
+      {% endif %}
+    {% endfor %}
+    {% if matching_authors.size > 0 %}
+      <ul class="list-none m-0 p-0">
+        {% for author in matching_authors %}
+          <li class="mb-4">
+            <span class="font-bold">{{ author.full_name }}</span>
+            <div class="text-sm text-gray-700 mb-1">
+              Born: {{ author.birth }}{% if author.birth_approximate == "TRUE" %} (approx.){% endif %}<br>
+              Died: {{ author.death }}{% if author.death_approximate == "TRUE" %} (approx.){% endif %}
+            </div>
+            <div class="text-base text-gray-900">{{ author.description }}</div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No author biography available.</p>
+    {% endif %}
+  {% else %}
+    <p>No author information found for this selection.</p>
+  {% endif %}
+</fieldset>
 
 {% if nonprefatory_annotations.size > 0 %}
   <fieldset class="my-5 rounded-lg bg-gray-100">
