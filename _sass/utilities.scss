@@ -568,6 +568,9 @@
 .border-gray {
     border-color: gray;
 }
+.border-gray-300 {
+    border-color: #d1d5db;
+}
 .border-solid {
     border-style: solid;
 }
@@ -709,4 +712,50 @@
 }
 .bg-gray-900 {
     background-color: #111827;
+}
+
+// Text Color
+.text-black {
+    color: black;
+}
+.text-white {
+    color: white;
+}
+
+// Shadows
+.shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.shadow-inner {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+}
+.shadow-none {
+    box-shadow: none;
+}
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.text-shadow-md {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+.text-shadow-lg {
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+.text-shadow-xl {
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+.text-shadow-none {
+    text-shadow: none;
 }

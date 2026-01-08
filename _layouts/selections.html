@@ -5,6 +5,7 @@ layout: page
 {{ content }}
 
 <select id="search-type" style="margin-bottom: 1em; padding: 0.5em;">
+  <option value="all">All</option>
   <option value="title">Title</option>
   <option value="author">Author</option>
   <option value="subjects">Subjects</option>
@@ -98,7 +99,7 @@ layout: page
   data-people="{{ people_str }}"
   data-locations="{{ locations_str }}">
       <div class="text-sm">
-        <div class="grid-item-shaded-header mb-2 rounded-t-lg text-lg font-semibold py-3">
+        <div class="grid-item-shaded-header mb-2 rounded-t-lg text-lg font-semibold py-3 text-shadow-xl">
           <a href="{{ '/selection/' | append: selection.id | relative_url }}">
             {% if matching_authors.size > 0 %}
               {{ matching_authors | join: ", " }}
@@ -118,7 +119,7 @@ layout: page
             {% assign subjects = selection.subjects | split: ";" %}
             {% for subject in subjects %}
               <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                <a href="selections/?search_field=subjects&search_term={{ subject | strip | url_encode }}">{{ subject | strip }}</a>
+                <a href="selections?search_field=subjects&search_term={{ subject | strip | url_encode }}">{{ subject | strip }}</a>
               </span>
             {% endfor %}
           </div>
@@ -184,6 +185,13 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (type === 'places') {
         const people = (item.getAttribute('data-locations') || '').split(';').map(s => s.trim());
         haystack = people.join(' ');
+      } else if (type === 'all') {
+        const title = (item.getAttribute('data-name') || '').toLowerCase().trim();
+        const subjects = (item.getAttribute('data-subjects') || '').split(';').map(s => s.trim()).join(' ');
+        const authors = (item.getAttribute('data-authors') || '').split(';').map(s => s.trim()).join(' ');
+        const people = (item.getAttribute('data-people') || '').split(';').map(s => s.trim()).join(' ');
+        const places = (item.getAttribute('data-locations') || '').split(';').map(s => s.trim()).join(' ');
+        haystack = [title, subjects, authors, people, places].join(' ');
       }
       if (haystack.includes(query)) {
         item.style.display = '';

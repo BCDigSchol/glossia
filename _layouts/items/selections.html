@@ -35,11 +35,9 @@ layout: default
           , <a href="{{ 'source/' | append: source.id | relative_url }}">{{ source.title }}</a>
         {% endif %}
 
-        {% if page.citation_start == page.citation_end %}
-          &nbsp;({{ page.citation_start }})
-        {% else %}
-          &nbsp;{{ page.citation_start }} - {{ page.citation_end }}
-        {% endif %}
+        {{ page.citation_start}}
+
+        {% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}{% endif %}
 </h4>
 
 <p>
@@ -135,11 +133,43 @@ layout: default
   {% endfor %}
 </div>
 
----
-
-<p>
+<fieldset class="my-5 rounded-lg bg-gray-100">
+  <legend class="border border-solid border-grey-200 bg-gray-500 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+    {% assign sources = site.data[site.sources_csv] %}
+    {% assign authors = site.data[site.authors_csv] %}
+    {% assign source = sources | where: "id", page.source_id | first %}
+    {% if source %}
+      {%- comment -%} Handle single or multiple author_ids on the source {%- endcomment -%}
+      {% if source.author_ids contains ";" %}
+        {% assign author_ids = source.author_ids | split: ";" | map: "strip" %}
+      {% else %}
+        {% assign author_ids = source.author_ids | append: "" | split: "|" %}
+      {% endif %}
+      {% assign matching_authors = "" | split: "" %}
+      {% for author in authors %}
+        {% assign author_id_str = author.id | append: "" | strip %}
+        {% if author_ids contains author_id_str %}
+          {% assign author_info = author.id | append: '|' | append: author.full_name %}
+            {% assign matching_authors = matching_authors | push: author_info %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% if matching_authors.size > 0 %}
+      {% for author_info in matching_authors -%}
+      {% assign parts = author_info | split: '|' -%}
+      {{ parts[1] }}{% if forloop.last == false %},{% endif -%}
+      {% endfor %}
+    {% endif %}
+    , {{ source.title }}
+    {{ page.citation_start}}
+    {% if page.citation_end and page.citation_start != page.citation_end %}-
+      {{ page.citation_end }}
+    {% endif %}
+  </legend>
   {{ page.excerpt | replace: '\n', '<br />' | markdownify }}
-</p>
+</fieldset>
+
+
 {% assign min_lat = nil %}
 {% assign max_lat = nil %}
 {% assign min_lng = nil %}

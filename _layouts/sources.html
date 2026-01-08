@@ -13,7 +13,7 @@ layout: page
 
 <div class="grid grid-cols-3 gap-4" id="sources-grid">
   {% for source in site.data.sources %}
-    <div class="grid-item border border-solid rounded-lg text-center" data-name="{{ source.title | downcase }}">
+    <div class="grid-item border border-solid border-grey-300 rounded-lg text-center" data-name="{{ source.title | downcase }}">
       <a href="/source/{{ source.id }}/">
         <h3>{{ source.title }}</h3>
       </a>
