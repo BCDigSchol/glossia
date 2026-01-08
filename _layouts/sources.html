@@ -11,20 +11,22 @@ layout: page
   style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
 />
 
-<div class="grid grid-cols-3 gap-4" id="sources-grid">
-  {% for source in site.data.sources %}
-    <div class="grid-item border border-solid border-grey-300 rounded-lg text-center" data-name="{{ source.title | downcase }}">
-      <a href="/source/{{ source.id }}/">
-        <h3>{{ source.title }}</h3>
+<ul class="flex flex-wrap gap-3 my-6 list-none" id="sources-list">
+  {% assign sorted_sources = site.data.sources | sort: "title" %}
+  {% for source in sorted_sources %}
+    <li data-name="{{ source.title | downcase }}">
+      <a href="/source/{{ source.id }}/"
+         class="inline-block bg-gray-100 border border-gray-300 rounded-full px-4 py-2 text-sm font-semibold text-gray-700 shadow hover:bg-gray-200 hover:text-blue-700 transition">
+        {{ source.title }}
       </a>
-    </div>
+    </li>
   {% endfor %}
-</div>
+</ul>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('source-search');
-  const items = document.querySelectorAll('#sources-grid .grid-item');
+  const items = document.querySelectorAll('#sources-list li');
 
   searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();

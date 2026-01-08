@@ -1,23 +1,20 @@
 ---
 ---
-
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: " en-US" }}">
+<html lang="{{ site.lang | default: "en-US" }}">
 
 {%- include head.html -%}
 
-<body class="w-full h-full flex flex-col justify-start items-center">
+<body class="w-full max-w-full h-full flex flex-col justify-start items-center overflow-x-hidden box-border">
   <!-- wrapper for site, which limits max-w-->
-  <div class="w-full h-full flex flex-col justify-start items-center site-wrapper">
+  <div class="w-full max-w-full h-full flex flex-col justify-start items-center site-wrapper box-border">
     {%- include header.html -%}
-    <div class="w-full h-full flex flex-col justify-start items-center content-wrapper">
-      <div class="w-full content-container">
+    <div class="w-full max-w-full h-full flex flex-col justify-start items-center content-wrapper box-border">
+      <div class="w-full max-w-full content-container box-border">
         {{ content }}
       </div>
     </div>
-    <!-- supresses footer if site-wide footer supression is set -->
     {% if site.hide-footer != true %}
-      <!-- supresses footer if page-level footer supression is set-->
       {% if page.hide-footer != true %}
         {%- include footer.html -%}
       {% endif %}

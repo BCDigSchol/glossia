@@ -26,6 +26,8 @@ theme-color: indigo # indigo|yellow|pink|green|stone|
 nav-menu:
   - title: Home
     link: index
+  - title: Readings
+    link: readings
   - title: Selections
     link: selections
   - title: Subjects

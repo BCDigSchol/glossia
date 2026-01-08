@@ -11,20 +11,22 @@ layout: page
   style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
 />
 
-<div class="grid grid-cols-3 gap-4" id="glossary-grid">
-  {% for glossary in site.data.glossary %}
-    <div class="grid-item border border-solid rounded-lg text-center" data-name="{{ glossary.term | downcase }}">
-      <a href="/glossary/{{ glossary.id }}/">
-        <h3>{{ glossary.term }}</h3>
+<ul class="list-none flex flex-col gap-3 my-6" id="glossary-list">
+  {% assign sorted_glossary = site.data.glossary | sort: "term" %}
+  {% for glossary in sorted_glossary %}
+    <li class="border border-gray-300 rounded-lg px-4 py-3 shadow transition hover:bg-gray-100 hover:shadow-md"
+        data-name="{{ glossary.term | downcase }}">
+      <a href="/glossary/{{ glossary.id }}/" class="block text-lg font-semibold text-blue-700 hover:text-blue-900 transition">
+        {{ glossary.term }}
       </a>
-    </div>
+    </li>
   {% endfor %}
-</div>
+</ul>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('glossary-search');
-  const items = document.querySelectorAll('#glossary-grid .grid-item');
+  const items = document.querySelectorAll('#glossary-list li');
 
   searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();

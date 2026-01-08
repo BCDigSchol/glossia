@@ -2,7 +2,12 @@
 layout: page
 ---
 
-{{ content }}
+<input
+  type="text"
+  id="subjects-search"
+  placeholder="Search subjects..."
+  style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
+/>
 
 {% assign selections = site.data[site.selections_csv] %}
 {% assign all_subjects = "" | split: "" %}
@@ -18,8 +23,33 @@ layout: page
   {% endif %}
 {% endfor %}
 
-<ul>
+<ul class="flex flex-wrap gap-3 my-6 list-none" id="subjects-list">
+  {% assign all_subjects = all_subjects | sort %}
   {% for subject in all_subjects %}
-    <li>{{ subject }}</li>
+    <li data-name="{{ subject | downcase }}">
+      <a href="selections?search_field=subjects&search_term={{ subject | url_encode }}"
+         class="inline-block bg-gray-100 border border-gray-300 rounded-full px-4 py-2 text-sm font-semibold text-gray-700 shadow hover:bg-gray-200 hover:text-blue-700 transition">
+        {{ subject }}
+      </a>
+    </li>
   {% endfor %}
 </ul>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('subjects-search');
+  const items = document.querySelectorAll('#subjects-list li');
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    items.forEach(item => {
+      const name = item.getAttribute('data-name');
+      if (name.includes(query)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+</script>

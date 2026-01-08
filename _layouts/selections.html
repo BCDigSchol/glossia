@@ -99,7 +99,7 @@ layout: page
   data-people="{{ people_str }}"
   data-locations="{{ locations_str }}">
       <div class="text-sm">
-        <div class="grid-item-shaded-header mb-2 rounded-t-lg text-lg font-semibold py-3 text-shadow-xl">
+        <div class="grid-item-shaded-header mb-2 rounded-t-lg text-lg font-semibold py-3 px-2 text-shadow-xl">
           <a href="{{ '/selection/' | append: selection.id | relative_url }}">
             {% if matching_authors.size > 0 %}
               {{ matching_authors | join: ", " }}
