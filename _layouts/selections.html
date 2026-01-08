@@ -130,7 +130,7 @@ layout: page
             Locations:
             {% for location_title in matching_locations %}
               <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                <a href="selections/?search_field=places&search_term={{ location_title | strip }}">{{ location_title | strip }}</a>
+                <a href="selections?search_field=places&search_term={{ location_title | strip }}">{{ location_title | strip }}</a>
               </span>
             {% endfor %}
           </div>
@@ -140,7 +140,7 @@ layout: page
             People:
             {% for person_name in matching_people %}
               <span class="inline-block bg-gray-200 rounded-xl px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                <a href="selections/?search_field=people&search_term={{ person_name | strip | url_encode }}">{{ person_name | strip }}</a>
+                <a href="selections?search_field=people&search_term={{ person_name | strip | url_encode }}">{{ person_name | strip }}</a>
               </span>
             {% endfor %}
           </div>
