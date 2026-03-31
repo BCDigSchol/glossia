@@ -185,9 +185,7 @@ layout: default
             {% for author_info in matching_authors -%}
             {% assign parts = author_info | split: '|' -%}
             <a href="{{ 'author/' | append: parts[0] | relative_url }}">{{ parts[1] }}</a>{% if forloop.last == false %},{% endif -%}
-            {% endfor %}
-          {% endif %}
-          , <a href="{{ 'source/' | append: source.id | relative_url }}">{{ source.title }}</a>
+            {% endfor %}{% endif %}, <a href="{{ 'source/' | append: source.id | relative_url }}">{{ source.title }}</a>
         {% endif %}
 
         {{ page.citation_start}}{% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}{% endif %}
