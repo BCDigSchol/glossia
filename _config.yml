@@ -13,7 +13,6 @@ authors_csv: authors
 persons_csv: persons
 sources_csv: sources
 excerpts_csv: excerpts
-glossary_csv: glossary
 annotations_csv: annotations
 images_csv: images
 
@@ -33,8 +32,6 @@ nav-menu:
     link: selections
   - title: Subjects
     link: subjects
-  - title: Glossary
-    link: glossary
   - title: More Info
     submenu:
       - title: Sources

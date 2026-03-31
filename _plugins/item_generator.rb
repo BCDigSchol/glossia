@@ -13,8 +13,6 @@ module CollectionBuilderPageGenerator
         'locations'  => site.config['locations_csv'],
         'authors'    => site.config['authors_csv'],
         'sources'    => site.config['sources_csv'],
-        'timeframes' => site.config['timeframes_csv'],
-        'glossary'   => site.config['glossary_csv'],
         'persons'     => site.config['persons_csv'],
         'selections' => site.config['selections_csv']
       }
