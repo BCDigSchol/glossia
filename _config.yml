@@ -11,11 +11,11 @@ selections_csv: selections
 locations_csv: locations
 authors_csv: authors
 persons_csv: persons
-timeframes_csv: timeframes
 sources_csv: sources
 excerpts_csv: excerpts
 glossary_csv: glossary
 annotations_csv: annotations
+images_csv: images
 
 # address for map tile server - change if you have your own server
 map_tile_server: https://demotiles.maplibre.org/style.json
@@ -45,8 +45,6 @@ nav-menu:
         link: authors
       - title: Locations
         link: locations
-      - title: Timeframes
-        link: timeframes
   - title: About
     link: about
 

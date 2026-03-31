@@ -1,5 +1,8 @@
 id,author_ids,title,abbreviated_title,source_date,description
-1,1,The Histories, Hist.,440-430 BC,"A lengthy account of the Greco-Persian Wars and other historical events by Herodotus"
-2,2,History of the Peloponnesian War, Hist. Pelop.,431-411 BC,"A historical account of the Peloponnesian War between Athens and Sparta by Thucydides"
-3,3,Anabasis, Anab.,370 BC,"A narrative of the expedition of Greek mercenaries in Persia by Xenophon"
-4,4,Parallel Lives, Par. Liv.,c.100-120 AD,"A series of biographies of famous Greeks and Romans by Plutarch"
+odyssey,homer,The Odyssey,Od.,c.8th century BC,"An epic poem attributed to Homer, detailing the adventures of Odysseus on his journey home after the Trojan War"
+works_and_days,hesiod,Works and Days,Works & Days,c.700 BCE,"A didactic poem by Hesiod that offers advice on farming and moral conduct"
+mimnermus_fragments,mimnermus,Fragments,Frag.,c.7th century BC,"Fragments of the elegiac poetry of Mimnermus, an early Greek poet"
+meiggs_lewis,inscriptions,Meiggs-Lewis,Meiggs-Lewis,c. 750-700 BCE,"A selection of Greek historical inscriptions to the end of the fifth century BC"
+herodotus_histories,herodotus,The Histories,Hist.,c. 440-430 BC,"A lengthy account of the Greco-Persian Wars and other historical events by Herodotus"
+thucydides_histories,thucydides,History of the Peloponnesian War,Hist. Pelop.,431-411 BC,"A historical account of the Peloponnesian War between Athens and Sparta by Thucydides"
+strabo_geography,strabo,Geography,Geog.,c. 1st C. CE,"A comprehensive description of the world by Strabo, including geographical, historical, and cultural information about various regions"

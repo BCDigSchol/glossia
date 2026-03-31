@@ -106,7 +106,7 @@ layout: page
             {% endif %}
             &nbsp;{{ source.abbreviated_title }}
             {% if selection.citation_start == selection.citation_end %}
-              &nbsp;({{ selection.citation_start }})
+              &nbsp;{{ selection.citation_start }}
             {% else %}
               &nbsp;{{ selection.citation_start }}-{{ selection.citation_end }}
             {% endif %}

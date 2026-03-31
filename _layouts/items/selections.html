@@ -40,7 +40,6 @@ layout: default
   </fieldset>
 {% endif %}
 
-
 <fieldset class="my-8 rounded-2xl bg-white border-2 border-blue-400 shadow-2xl py-6 transition-transform duration-200 hover:scale-[1.01]">
   <legend class="border border-grey-200 bg-gray-800 border-solid rounded-lg px-4 py-2 text-white font-bold shadow-md text-lg tracking-wide">
     {% assign sources = site.data[site.sources_csv] %}
@@ -65,17 +64,96 @@ layout: default
     {% if matching_authors.size > 0 %}
       {% for author_info in matching_authors -%}
       {% assign parts = author_info | split: '|' -%}
-      {{ parts[1] }}{% if forloop.last == false %},{% endif -%}
-      {% endfor %}
-    {% endif %}
-    , {{ source.title }}
-    {{ page.citation_start}}
-    {% if page.citation_end and page.citation_start != page.citation_end %}-
-      {{ page.citation_end }}
+      {{ parts[1] }}{% if forloop.last == false %},{% endif -%}{% endfor %}{% endif %}, {{ source.title }}
+    {{ page.citation_start}}{% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}
     {% endif %}
   </legend>
-  {{ page.excerpt | replace: '\n', '<br />' | markdownify }}
+  {% assign lines = page.excerpt | split: '\n' %}
+  <pre class="excerpt-block">{% for line in lines -%}{% assign parts = line | split: '\t' %}{% if parts.size > 1 %}<span class="line-number">{{ parts[0] }}</span>{{ parts[1] }}{% else %}{{ line }}{% endif %}
+{% endfor %}</pre>
 </fieldset>
+
+{% if nonprefatory_annotations.size > 0 %}
+  <fieldset class="my-5 rounded-lg bg-gray-100">
+    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
+      Footnotes
+    </legend>
+    <ol class="m-0 p-0">
+      {% for annotation in nonprefatory_annotations %}
+        <li class="ml-10">
+          <em>{{ annotation.text | markdownify }}</em>
+        </li>
+      {% endfor %}
+    </ol>
+  </fieldset>
+{% endif %}
+
+{%- comment -%} Image gallery for images matching this selection, with modal pop-out {%- endcomment -%}
+{% assign images = site.data[site.images_csv] %}
+{% assign gallery_images = images | where: "selection_id", page.id %}
+{% if gallery_images and gallery_images.size > 0 %}
+  <div class="my-8 mt-5">
+    <fieldset class="rounded-lg bg-gray-50 border border-blue-200 px-4 py-4 mb-6">
+      <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">Images for this Selection</legend>
+      <div class="flex flex-wrap gap-6 justify-start">
+        {% for image in gallery_images %}
+          <figure class="w-32 flex flex-col items-center mb-4 cursor-pointer">
+            <img src="{{ '/assets/img/' | append: image.url | relative_url }}" alt="{{ image.caption | default: 'Selection image' }}" class="rounded shadow-md max-w-full max-h-32 object-cover bg-white border border-gray-200 gallery-thumb" loading="lazy" style="width: 8rem; height: 8rem; object-fit: cover; cursor: pointer;" data-full="{{ image.url | relative_url }}" data-caption="{{ image.caption | escape }}" data-credit="{{ image.credit | escape }}" />
+            {% if image.caption or image.credit %}
+              <figcaption class="mt-2 text-xs text-gray-700 text-center">
+                {% if image.caption %}<span>{{ image.caption }}</span>{% endif %}
+                {% if image.credit %}<span class="block text-xs text-gray-500">{{ image.credit }}</span>{% endif %}
+              </figcaption>
+            {% endif %}
+          </figure>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <!-- Modal for full-size image popout -->
+    <div id="gallery-modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); align-items:center; justify-content:center;">
+      <div style="position:relative; max-width:90vw; max-height:90vh; margin:auto; display:flex; flex-direction:column; align-items:center;">
+        <button id="gallery-modal-close" style="position:absolute; top:0.5rem; right:0.5rem; background:#fff; border:none; border-radius:50%; width:2rem; height:2rem; font-size:1.5rem; cursor:pointer; z-index:10;">&times;</button>
+        <img id="gallery-modal-img" src="" alt="Full size image" style="max-width:80vw; max-height:70vh; border-radius:0.5rem; box-shadow:0 8px 32px rgba(0,0,0,0.5); background:#fff;" />
+        <div id="gallery-modal-caption" class="text-white text-center mt-4 text-base"></div>
+        <div id="gallery-modal-credit" class="text-gray-300 text-center text-xs mt-1"></div>
+      </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var thumbs = document.querySelectorAll('.gallery-thumb');
+      var modal = document.getElementById('gallery-modal');
+      var modalImg = document.getElementById('gallery-modal-img');
+      var modalCaption = document.getElementById('gallery-modal-caption');
+      var modalCredit = document.getElementById('gallery-modal-credit');
+      var modalClose = document.getElementById('gallery-modal-close');
+      thumbs.forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
+          modalImg.src = '/assets/img' + thumb.getAttribute('data-full');
+          modalCaption.textContent = thumb.getAttribute('data-caption') || '';
+          modalCredit.textContent = thumb.getAttribute('data-credit') || '';
+          modal.style.display = 'flex';
+        });
+      });
+      modalClose.addEventListener('click', function() {
+        modal.style.display = 'none';
+        modalImg.src = '';
+        modalCaption.textContent = '';
+        modalCredit.textContent = '';
+      });
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+          modalImg.src = '';
+          modalCaption.textContent = '';
+          modalCredit.textContent = '';
+        }
+      });
+    });
+    </script>
+  </div>
+{% endif %}
+
+
 
   <fieldset class="my-5 rounded-lg bg-gray-100">
     <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
@@ -112,9 +190,7 @@ layout: default
           , <a href="{{ 'source/' | append: source.id | relative_url }}">{{ source.title }}</a>
         {% endif %}
 
-        {{ page.citation_start}}
-
-        {% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}{% endif %}
+        {{ page.citation_start}}{% if page.citation_end and page.citation_start != page.citation_end %}-{{ page.citation_end }}{% endif %}
     </p>
 
     <p>
@@ -250,8 +326,12 @@ layout: default
           <li class="mb-4">
             <span class="font-bold">{{ author.full_name }}</span>
             <div class="text-sm text-gray-700 mb-1">
-              Born: {{ author.birth }}{% if author.birth_approximate == "TRUE" %} (approx.){% endif %}<br>
-              Died: {{ author.death }}{% if author.death_approximate == "TRUE" %} (approx.){% endif %}
+              {% if author.birth %}
+                Born: {{ author.birth }}{% if author.birth_approximate == "TRUE" %} (approx.){% endif %}<br>
+              {% endif %}
+              {% if author.death %}
+                Died: {{ author.death }}{% if author.death_approximate == "TRUE" %} (approx.){% endif %}
+              {% endif %}
             </div>
             <div class="text-base text-gray-900">{{ author.description }}</div>
           </li>
@@ -264,21 +344,6 @@ layout: default
     <p>No author information found for this selection.</p>
   {% endif %}
 </fieldset>
-
-{% if nonprefatory_annotations.size > 0 %}
-  <fieldset class="my-5 rounded-lg bg-gray-100">
-    <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">
-      Annotations
-    </legend>
-    <ol class="m-0 p-0">
-      {% for annotation in nonprefatory_annotations %}
-        <li class="mb-3 p-4 ml-10">
-          <em>{{ annotation.text | markdownify }}</em>
-        </li>
-      {% endfor %}
-    </ol>
-  </fieldset>
-{% endif %}
 
 
 {% assign min_lat = nil %}
@@ -304,7 +369,8 @@ layout: default
 {% assign center_lat = min_lat | plus: max_lat | divided_by: 2 %}
 {% assign center_lng = min_lng | plus: max_lng | divided_by: 2 %}
 
-<div id="map" style="height: 400px;" class="border border-solid rounded"></div>
+{% if matching_locations.size > 0 %}
+<div id="map" style="height: 400px;" class="border border-solid rounded mb-4"></div>
 <script>
     {% if matching_locations.size > 0 %}
         var mapCenter = [{{ center_lng }}, {{ center_lat }}];
@@ -325,6 +391,7 @@ layout: default
             .addTo(map);
     {% endfor %}
 </script>
+{% endif %}
 
   </div>
 
