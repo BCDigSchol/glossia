@@ -14,7 +14,7 @@
                 {% endif %}
                 <span>
                     {% if menu_item.link %}
-                        <a href="{{ menu_item.link | relative_url }}">
+                        <a href="{{ '/' | append: menu_item.link | relative_url }}">
                             {{ menu_item.title }}
                         </a>
                     {% elsif menu_item.external-link %}
@@ -29,7 +29,7 @@
                     <div class="dropdown-content">
                         {% for submenu_item in menu_item.submenu %}
                             {% if submenu_item.link %}
-                            <a href="{{ submenu_item.link | relative_url }}">
+                            <a href="{{ '/' | append: submenu_item.link | relative_url }}">
                                 {{ submenu_item.title }}
                             </a>
                             {% elsif submenu_item.external-link %}
@@ -87,7 +87,7 @@
                     {% endif %}
                     <span>
                         {% if menu_item.link %}
-                            <a href="{{ menu_item.link | relative_url }}">
+                            <a href="{{ '/' | append: menu_item.link | relative_url }}">
                                 {{ menu_item.title }}
                             </a>
                         {% elsif menu_item.external-link %}
@@ -102,7 +102,7 @@
                         <div class="dropdown-content">
                             {% for submenu_item in menu_item.submenu %}
                                 {% if submenu_item.link %}
-                                <a href="{{ submenu_item.link | relative_url }}">
+                                <a href="{{ '/' | append: submenu_item.link | relative_url }}">
                                     {{ submenu_item.title }}
                                 </a>
                                 {% elsif submenu_item.external-link %}
