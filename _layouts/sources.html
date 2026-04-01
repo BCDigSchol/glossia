@@ -15,7 +15,7 @@ layout: page
   {% assign sorted_sources = site.data.sources | sort: "title" %}
   {% for source in sorted_sources %}
     <li data-name="{{ source.title | downcase }}">
-      <a href="/source/{{ source.id }}/"
+      <a href="{{ '/source/' | append: source.id | relative_url }}"
          class="inline-block bg-gray-100 border border-gray-300 rounded-full px-4 py-2 text-sm font-semibold text-gray-700 shadow hover:bg-gray-200 hover:text-blue-700 transition">
         {{ source.title }}
       </a>
