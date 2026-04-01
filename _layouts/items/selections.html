@@ -128,7 +128,7 @@ layout: default
       var modalClose = document.getElementById('gallery-modal-close');
       thumbs.forEach(function(thumb) {
         thumb.addEventListener('click', function() {
-          modalImg.src = '/assets/img' + thumb.getAttribute('data-full');
+          modalImg.src = '../assets/img' + thumb.getAttribute('data-full');
           modalCaption.textContent = thumb.getAttribute('data-caption') || '';
           modalCredit.textContent = thumb.getAttribute('data-credit') || '';
           modal.style.display = 'flex';
