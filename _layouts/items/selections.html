@@ -128,7 +128,10 @@ layout: default
       var modalClose = document.getElementById('gallery-modal-close');
       thumbs.forEach(function(thumb) {
         thumb.addEventListener('click', function() {
-          modalImg.src = '../assets/img' + thumb.getAttribute('data-full');
+          var imgBaseUrl = "{{ '/assets/img/' | relative_url }}";
+          var fullImg = thumb.getAttribute('data-full') || '';
+          if (fullImg.startsWith('/')) fullImg = fullImg.substring(1);
+          modalImg.src = imgBaseUrl.replace(/\/$/, '') + '/' + fullImg;
           modalCaption.textContent = thumb.getAttribute('data-caption') || '';
           modalCredit.textContent = thumb.getAttribute('data-credit') || '';
           modal.style.display = 'flex';
