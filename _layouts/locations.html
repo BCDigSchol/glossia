@@ -11,7 +11,7 @@ layout: page
   style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
 />
 
-<ul class="flex flex-wrap gap-3 my-6 list-none" id="locations-list">
+<ul class="flex flex-wrap gap-3 my-6 list-none item-list-wrap" id="locations-list">
   {% assign sorted_locations = site.data.locations | sort: "title" %}
   {% for location in sorted_locations %}
     <li data-name="{{ location.title | downcase }}">

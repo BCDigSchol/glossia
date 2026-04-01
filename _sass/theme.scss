@@ -434,3 +434,17 @@ h3 {
   text-align: right;
   margin-right: 0.5em;
 }
+
+.item-list-wrap {
+  flex-wrap: wrap;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-left: 0;
+  margin-left: 0;
+  box-sizing: border-box;
+}
+.item-list-wrap li {
+  /* Prevent items from growing too wide */
+  max-width: 100%;
+  word-break: break-word;
+}

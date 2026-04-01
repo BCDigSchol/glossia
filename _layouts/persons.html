@@ -11,7 +11,7 @@ layout: page
   style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
 />
 
-<ul class="flex flex-wrap gap-3 my-6 list-none" id="people-list">
+<ul class="flex flex-wrap gap-3 my-6 list-none item-list-wrap" id="people-list">
   {% assign sorted_persons = site.data.persons | sort: "short_name" %}
   {% for person in sorted_persons %}
     <li data-name="{{ person.full_name | downcase }}">

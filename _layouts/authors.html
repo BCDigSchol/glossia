@@ -10,7 +10,7 @@ layout: page
   style="margin-bottom: 1em; padding: 0.5em; width: 100%; max-width: 400px;"
 />
 
-<ul class="flex flex-wrap gap-3 my-6 list-none" id="authors-list">
+<ul class="flex flex-wrap gap-3 my-6 list-none item-list-wrap" id="authors-list">
   {% assign sorted_authors = site.data.authors | sort: "short_name" %}
   {% for author in sorted_authors %}
     <li data-name="{{ author.short_name | downcase }}">

@@ -23,7 +23,7 @@ layout: page
   {% endif %}
 {% endfor %}
 
-<ul class="flex flex-wrap gap-3 my-6 list-none" id="subjects-list">
+<ul class="flex flex-wrap gap-3 my-6 list-none item-list-wrap" id="subjects-list">
   {% assign all_subjects = all_subjects | sort %}
   {% for subject in all_subjects %}
     <li data-name="{{ subject | downcase }}">
