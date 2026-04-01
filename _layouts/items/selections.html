@@ -97,8 +97,9 @@ layout: default
       <legend class="border border-solid border-grey-200 bg-gray-400 rounded-lg px-3 py-1 text-white font-bold shadow-lg text-shadow">Images for this Selection</legend>
       <div class="flex flex-wrap gap-6 justify-start">
         {% for image in gallery_images %}
+          {% assign img_url = image.url | remove_first: 'glossia/' %}
           <figure class="w-32 flex flex-col items-center mb-4 cursor-pointer">
-            <img src="{{ '/assets/img/' | append: image.url | relative_url }}" alt="{{ image.caption | default: 'Selection image' }}" class="rounded shadow-md max-w-full max-h-32 object-cover bg-white border border-gray-200 gallery-thumb" loading="lazy" style="width: 8rem; height: 8rem; object-fit: cover; cursor: pointer;" data-full="{{ image.url | relative_url }}" data-caption="{{ image.caption | escape }}" data-credit="{{ image.credit | escape }}" />
+            <img src="{{ '/assets/img/' | append: img_url | relative_url }}" alt="{{ image.caption | default: 'Selection image' }}" class="rounded shadow-md max-w-full max-h-32 object-cover bg-white border border-gray-200 gallery-thumb" loading="lazy" style="width: 8rem; height: 8rem; object-fit: cover; cursor: pointer;" data-full="{{ img_url | relative_url }}" data-caption="{{ image.caption | escape }}" data-credit="{{ image.credit | escape }}" />
             {% if image.caption or image.credit %}
               <figcaption class="mt-2 text-xs text-gray-700 text-center">
                 {% if image.caption %}<span>{{ image.caption }}</span>{% endif %}
