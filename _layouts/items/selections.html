@@ -98,9 +98,9 @@ layout: default
       <div class="flex flex-wrap gap-6 justify-start">
         {% for image in gallery_images %}
           {% assign img_url_parts = image.url | split: '/' %}
-          {% assign img_filename = img_url_parts | last %}
+          {% assign img_filename = img_url_parts | last | remove_first: '/' %}
           <figure class="w-32 flex flex-col items-center mb-4 cursor-pointer">
-            <img src="{{ '/assets/img/' | append: img_filename | relative_url }}" alt="{{ image.caption | default: 'Selection image' }}" class="rounded shadow-md max-w-full max-h-32 object-cover bg-white border border-gray-200 gallery-thumb" loading="lazy" style="width: 8rem; height: 8rem; object-fit: cover; cursor: pointer;" data-full="{{ img_filename | relative_url }}" data-caption="{{ image.caption | escape }}" data-credit="{{ image.credit | escape }}" />
+            <img src="{{ '/assets/img/' | append: img_filename | relative_url }}" alt="{{ image.caption | default: 'Selection image' }}" class="rounded shadow-md max-w-full max-h-32 object-cover bg-white border border-gray-200 gallery-thumb" loading="lazy" style="width: 8rem; height: 8rem; object-fit: cover; cursor: pointer;" data-full="{{ img_filename }}" data-caption="{{ image.caption | escape }}" data-credit="{{ image.credit | escape }}" />
             {% if image.caption or image.credit %}
               <figcaption class="mt-2 text-xs text-gray-700 text-center">
                 {% if image.caption %}<span>{{ image.caption }}</span>{% endif %}
